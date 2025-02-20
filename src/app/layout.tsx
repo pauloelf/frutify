@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Quicksand, Inter } from 'next/font/google'
 import "./globals.css";
 import { Header } from "@/components/header";
+import { Footer } from "@/components/footer";
 
 export const metadata: Metadata = {
   title: "Frutify",
@@ -32,9 +33,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-br" className={`${QuicksandFont.variable} ${InterFont.variable}`}>
-      <body className="bg-emerald-50">
+      <body className="flex flex-col h-screen bg-emerald-100">
         <Header />
         {children}
+        <Footer />
       </body>
     </html>
   );
