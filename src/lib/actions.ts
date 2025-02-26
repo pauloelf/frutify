@@ -27,7 +27,10 @@ export async function getFruit(fruitName: string) {
   });
 
   if (!response.ok) {
-    throw new Error("Falha ao carregar os dados.");
+    return {
+      error: true,
+      message: "Falha ao carregar os dados."
+    }
   }
   const fruit: Fruit = await response.json();
 
