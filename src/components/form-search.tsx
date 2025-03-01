@@ -1,15 +1,18 @@
 'use client'
 
+import { TranslateToEn } from "@/lib/funcs";
 import FruitBadge from "./fruit-badge";
 import { InputSearch } from "./input-search";
 import { useRouter } from "next/navigation";
+import { FruitNamesInPortuguese } from "@/lib/types";
 
 export default function FormSearch() {
   const router = useRouter()
 
   const handleAction = (formData: FormData) => {
-    const search = formData.get('search')
-    router.push(`/collection/${search}`)
+    const search = formData.get('search')?.toString()
+    const searchPath = TranslateToEn(search?.toLowerCase() as FruitNamesInPortuguese)
+    router.push(`/collection/${(searchPath || search?.toLowerCase())?.replace(" ", "-")}`)
   }
 
   return (
