@@ -3,7 +3,8 @@
 import { useState } from 'react';
 import Pagination from './pagination';
 import Link from 'next/link';
-import { Fruit } from '@/lib/types';
+import { Fruit, FruitFamiliesInEnglish, FruitGenusInEnglish, FruitNamesInEnglish, FruitOrdersInEnglish } from '@/lib/types';
+import { TranslateFamily, TranslateGenus, TranslateToPt, TranslateOrder } from '@/lib/funcs';
 
 interface FruitListProps {
   initialFruits: Fruit[];
@@ -16,6 +17,8 @@ export default function FruitList({ initialFruits }: FruitListProps) {
   const indexOfLastFruit = currentPage * fruitsPerPage;
   const indexOfFirstFruit = indexOfLastFruit - fruitsPerPage;
   const currentFruits = initialFruits.slice(indexOfFirstFruit, indexOfLastFruit);
+
+  const getFruitPath = (name: string) => name.replace(" ", "-").toLowerCase()
 
   return (
     <div>
@@ -39,12 +42,20 @@ export default function FruitList({ initialFruits }: FruitListProps) {
             {currentFruits.map((fruit, index) => (
               <tr key={fruit.id} className={index % 2 === 0 ? 'bg-emerald-50' : 'bg-emerald-100'}>
                 <td className="px-4 py-2 border text-emerald-900 font-secondary font-semibold hover:underline bg-emerald-100 text-center">
-                  <Link href={`/collection/${fruit.name.toLowerCase()}`}>Visualizar</Link>
+                  <Link className='text-red-700' href={`/collection/${getFruitPath(fruit.name)}`}>Visualizar</Link>
                 </td>
-                <td className="px-4 py-2 border text-emerald-800">{fruit.name}</td>
-                <td className="px-4 py-2 border text-emerald-800">{fruit.family}</td>
-                <td className="px-4 py-2 border text-emerald-800">{fruit.order}</td>
-                <td className="px-4 py-2 border text-emerald-800">{fruit.genus}</td>
+                <td className="px-4 py-2 border text-emerald-800 capitalize">
+                  {TranslateToPt(fruit.name.toLowerCase().trim() as FruitNamesInEnglish)}
+                </td>
+                <td className="px-4 py-2 border text-emerald-800 capitalize">
+                  {TranslateFamily(fruit.family.toLowerCase().trim() as FruitFamiliesInEnglish)}
+                </td>
+                <td className="px-4 py-2 border text-emerald-800 capitalize">
+                  {TranslateOrder(fruit.order.toLowerCase().trim() as FruitOrdersInEnglish)}
+                </td>
+                <td className="px-4 py-2 border text-emerald-800 capitalize">
+                  {TranslateGenus(fruit.genus.toLowerCase().trim() as FruitGenusInEnglish)}
+                </td>
                 <td className="px-4 py-2 border text-emerald-800">{fruit.nutritions.carbohydrates}g</td>
                 <td className="px-4 py-2 border text-emerald-800">{fruit.nutritions.fat}g</td>
                 <td className="px-4 py-2 border text-emerald-800">{fruit.nutritions.protein}g</td>
