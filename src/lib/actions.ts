@@ -19,8 +19,8 @@ export async function getFruits() {
   }
 }
 
-export async function getFruit(fruitName: string) {
-  const response = await fetch(`https://www.fruityvice.com/api/fruit/${fruitName}`, {
+export async function getFruit(id: number) {
+  const response = await fetch(`https://www.fruityvice.com/api/fruit/${id}`, {
     next: {
       revalidate: 3600
     }
