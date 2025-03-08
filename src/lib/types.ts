@@ -200,3 +200,5 @@ export type FruitOrdersInEnglish =
   | "ericales"
   | "fagales"
   | "brassicales";
+
+export type FruitNutrientsInEnglish = 'carbohydrates' | 'protein' | 'sugar' | 'fat' | 'calories'
