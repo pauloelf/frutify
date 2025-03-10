@@ -1,22 +1,46 @@
 'use client'
 
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import Pagination from './pagination';
 import Link from 'next/link';
 import { Fruit, FruitFamiliesInEnglish, FruitGenusInEnglish, FruitNamesInEnglish, FruitOrdersInEnglish } from '@/lib/types';
 import { TranslateFamily, TranslateGenus, TranslateToPt, TranslateOrder } from '@/lib/funcs';
+import { FilterContext } from '@/contexts/filter-context';
+import { getFruitsPerFamily } from '@/lib/actions';
 
 interface FruitListProps {
   initialFruits: Fruit[];
 }
 
 export default function FruitList({ initialFruits }: FruitListProps) {
+  const [fruitsFiltered, setFruitsFiltered] = useState<Fruit[]>([])
+  const [currentFruits, setCurrentFruits] = useState<Fruit[]>([])
   const [currentPage, setCurrentPage] = useState(1);
   const fruitsPerPage = 10;
+  const { filterFamily } = useContext(FilterContext)
 
   const indexOfLastFruit = currentPage * fruitsPerPage;
   const indexOfFirstFruit = indexOfLastFruit - fruitsPerPage;
-  const currentFruits = initialFruits.slice(indexOfFirstFruit, indexOfLastFruit);
+
+  const handleFilter = async (family: FruitFamiliesInEnglish) => {
+    const { fruitsPerFamily } = await getFruitsPerFamily(family)
+    setFruitsFiltered(fruitsPerFamily)
+  }
+
+  useEffect(() => {
+    if (filterFamily !== 'all') {
+      handleFilter(filterFamily)
+    } else {
+      setFruitsFiltered([])
+    }
+    setCurrentPage(1)
+  }, [filterFamily])
+
+  useEffect(() => {
+    const sourceFruits = filterFamily !== 'all' ? fruitsFiltered : initialFruits
+    setCurrentFruits(sourceFruits.slice(indexOfFirstFruit, indexOfLastFruit))
+  }, [fruitsFiltered, initialFruits, indexOfFirstFruit, indexOfLastFruit])
+
 
   const getFruitPath = (name: string) => name.replace(" ", "-").toLowerCase()
 
@@ -68,7 +92,7 @@ export default function FruitList({ initialFruits }: FruitListProps) {
       </div>
       <Pagination
         fruitsPerPage={fruitsPerPage}
-        totalFruits={initialFruits.length}
+        totalFruits={filterFamily !== 'all' ? fruitsFiltered.length : initialFruits.length}
         currentPage={currentPage}
         onPageChange={setCurrentPage}
       />
