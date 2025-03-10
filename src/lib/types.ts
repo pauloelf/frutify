@@ -202,3 +202,8 @@ export type FruitOrdersInEnglish =
   | "brassicales";
 
 export type FruitNutrientsInEnglish = 'carbohydrates' | 'protein' | 'sugar' | 'fat' | 'calories'
+
+export type FilterPerFamilyContextType = {
+  filterFamily: FruitFamiliesInEnglish | 'all'
+  setFilterFamily: React.Dispatch<React.SetStateAction<FruitFamiliesInEnglish | 'all'>>
+}
