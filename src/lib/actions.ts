@@ -1,6 +1,6 @@
 'use server'
 
-import { Fruit } from "./types";
+import { Fruit, FruitFamiliesInEnglish } from "./types";
 
 export async function getFruits() {
   const response = await fetch('https://www.fruityvice.com/api/fruit/all', {
@@ -36,5 +36,22 @@ export async function getFruit(id: number) {
 
   return {
     fruit
+  }
+}
+
+export async function getFruitsPerFamily(family: FruitFamiliesInEnglish) {
+  const response = await fetch(`https://www.fruityvice.com/api/fruit/family/${family}`, {
+    next: {
+      revalidate: 3600
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error("Falha ao carregar os dados.");
+  }
+  const fruitsPerFamily: Fruit[] = await response.json();
+
+  return {
+    fruitsPerFamily
   }
 }
